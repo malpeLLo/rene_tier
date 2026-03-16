@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Распределение по тирам</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Шапка */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            color: white;
+            font-size: 48px;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: 18px;
+            font-weight: 300;
+        }
+
+        /* Статистика */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            animation: slideDown 0.5s ease;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: #667eea;
+            line-height: 1.2;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Сетка тиров */
+        .tiers-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        /* Карточка тира */
+        .tier-card {
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideUp 0.5s ease;
+        }
+
+        .tier-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .tier-header {
+            padding: 25px;
+            text-align: center;
+            color: white;
+        }
+
+        .tier-1 .tier-header {
+            background: linear-gradient(135deg, #f6b868 0%, #ee6b2e 100%);
+        }
+
+        .tier-2 .tier-header {
+            background: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%);
+        }
+
+        .tier-3 .tier-header {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+        }
+
+        .tier-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .tier-count {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Список игроков */
+        .players-list {
+            padding: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .player-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .player-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .player-rank {
+            width: 30px;
+            height: 30px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            margin-right: 15px;
+        }
+
+        .tier-1 .player-rank {
+            background: #ee6b2e;
+        }
+
+        .tier-2 .player-rank {
+            background: #3f2b96;
+        }
+
+        .tier-3 .player-rank {
+            background: #2ecc71;
+        }
+
+        .player-name {
+            flex: 1;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .player-tag {
+            color: #999;
+            font-size: 12px;
+            font-family: monospace;
+        }
+
+        /* Скроллбар */
+        .players-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .players-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .players-list::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+
+        .players-list::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Анимации */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Футер */
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+        }
+
+        .update-time {
+            background: rgba(255,255,255,0.2);
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 900px) {
+            .tiers-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+                align-items: center;
+            }
+
+            .stat-card {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Шапка -->
+        <div class="header">
+            <h1>🎮 РАСПРЕДЕЛЕНИЕ ПО ТИРАМ</h1>
+            <div class="subtitle">Текущий состав игроков</div>
+        </div>
+
+        <!-- Статистика -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="totalPlayers">27</div>
+                <div class="stat-label">Всего игроков</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="tier1Count">9</div>
+                <div class="stat-label">Tier 1</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="tier2Count">9</div>
+                <div class="stat-label">Tier 2</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="tier3Count">9</div>
+                <div class="stat-label">Tier 3</div>
+            </div>
+        </div>
+
+        <!-- Тиры -->
+        <div class="tiers-grid" id="tiersContainer">
+            <!-- Tier 1 -->
+            <div class="tier-card tier-1">
+                <div class="tier-header">
+                    <div class="tier-name">⭐ TIER 1</div>
+                    <div class="tier-count">Элита</div>
+                </div>
+                <div class="players-list" id="tier1List">
+                    <!-- Сюда вставятся игроки скриптом -->
+                </div>
+            </div>
+
+            <!-- Tier 2 -->
+            <div class="tier-card tier-2">
+                <div class="tier-header">
+                    <div class="tier-name">⭐⭐ TIER 2</div>
+                    <div class="tier-count">Основной состав</div>
+                </div>
+                <div class="players-list" id="tier2List">
+                    <!-- Сюда вставятся игроки скриптом -->
+                </div>
+            </div>
+
+            <!-- Tier 3 -->
+            <div class="tier-card tier-3">
+                <div class="tier-header">
+                    <div class="tier-name">⭐⭐⭐ TIER 3</div>
+                    <div class="tier-count">Новички</div>
+                </div>
+                <div class="players-list" id="tier3List">
+                    <!-- Сюда вставятся игроки скриптом -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Футер -->
+        <div class="footer">
+            <div class="update-time">
+                🔄 Обновлено: <span id="updateTime"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Твой список игроков
+        const players = [
+            "dyaleo57", "hal98", "shad1w", "noteflight", "Shio",
+            "iKannaTense", "RoiNest", ".DmiVob.", "xarlauss", "ZawaZawa",
+            "kyrksha", "kapkaka", "Gibson", "force.major", "TUY",
+            "grofine", "Rene", "dima_rusin", "Anlo", "JakeLife",
+            "HornyRatio", "tetsuyabtw", "kykan_velikana", "Kazuto", "Abeno",
+            "Sephira", "Flavik", "hiyori"
+        ];
+
+        // Функция для случайного распределения
+        function distributePlayers(players) {
+            // Перемешиваем массив
+            const shuffled = [...players].sort(() => Math.random() - 0.5);
+            
+            // Делим на 3 примерно равные части
+            const chunkSize = Math.ceil(shuffled.length / 3);
+            const tier1 = shuffled.slice(0, chunkSize);
+            const tier2 = shuffled.slice(chunkSize, chunkSize * 2);
+            const tier3 = shuffled.slice(chunkSize * 2);
+            
+            return { tier1, tier2, tier3 };
+        }
+
+        // Функция для отображения игроков
+        function displayPlayers() {
+            const distribution = distributePlayers(players);
+            
+            // Обновляем счетчики
+            document.getElementById('totalPlayers').textContent = players.length;
+            document.getElementById('tier1Count').textContent = distribution.tier1.length;
+            document.getElementById('tier2Count').textContent = distribution.tier2.length;
+            document.getElementById('tier3Count').textContent = distribution.tier3.length;
+            
+            // Функция для отрисовки списка
+            function renderList(elementId, players, startRank = 1) {
+                const list = document.getElementById(elementId);
+                list.innerHTML = '';
+                
+                players.sort().forEach((player, index) => {
+                    const playerItem = document.createElement('div');
+                    playerItem.className = 'player-item';
+                    playerItem.innerHTML = `
+                        <div class="player-rank">${startRank + index}</div>
+                        <span class="player-name">${player}</span>
+                        <span class="player-tag">#${Math.floor(Math.random() * 10000)}</span>
+                    `;
+                    list.appendChild(playerItem);
+                });
+            }
+            
+            // Отрисовываем все тиры
+            renderList('tier1List', distribution.tier1, 1);
+            renderList('tier2List', distribution.tier2, 1);
+            renderList('tier3List', distribution.tier3, 1);
+            
+            // Обновляем время
+            const now = new Date();
+            document.getElementById('updateTime').textContent = 
+                now.toLocaleString('ru-RU', { 
+                    day: '2-digit', 
+                    month: '2-digit', 
+                    year: 'numeric',
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+        }
+
+        // Запускаем при загрузке
+        displayPlayers();
+
+        // Кнопка обновления (для красоты, можно нажать F5)
+        console.log('Сайт загружен! Нажми F5 чтобы перераспределить игроков');
+    </script>
+</body>
+</html>
