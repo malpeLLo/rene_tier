@@ -13,22 +13,24 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #0F0F0F;
-            color: #E0E0E0;
+            background-color: #0A0A0A;
+            color: #EDEDED;
             min-height: 100vh;
             padding: 30px 20px;
         }
 
         .container {
-            max-width: 1300px;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
-        /* Поиск */
+        /* ----- Поиск ----- */
         .search-container {
             margin-bottom: 40px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
         }
 
         .search-wrapper {
@@ -42,7 +44,7 @@
             left: 16px;
             top: 50%;
             transform: translateY(-50%);
-            color: #BB86FC;
+            color: #3B82F6;
             font-size: 20px;
             pointer-events: none;
         }
@@ -50,10 +52,10 @@
         #searchInput {
             width: 100%;
             padding: 16px 20px 16px 50px;
-            background-color: #1C1C1C;
-            border: 1px solid #2C2C2C;
+            background-color: #1A1A1A;
+            border: 1px solid #2A2A2A;
             border-radius: 40px;
-            color: #E0E0E0;
+            color: #EDEDED;
             font-size: 16px;
             outline: none;
             transition: all 0.2s;
@@ -61,44 +63,53 @@
         }
 
         #searchInput:focus {
-            border-color: #BB86FC;
+            border-color: #3B82F6;
             background-color: #222;
-            box-shadow: 0 0 0 3px rgba(187, 134, 252, 0.2);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
         }
 
         #searchInput::placeholder {
             color: #6B6B6B;
         }
 
-        /* Сетка тиров */
+        .search-hint {
+            color: #8A8F99;
+            font-size: 14px;
+        }
+        .search-hint span {
+            color: #3B82F6;
+            font-weight: 500;
+        }
+
+        /* Сетка основных тиров */
         .tiers-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: 1fr 1.8fr 1fr;
             gap: 25px;
+            align-items: start;
         }
 
         /* Карточка тира */
         .tier-card {
-            background-color: #1C1C1C;
+            background-color: #141414;
             border-radius: 24px;
             overflow: hidden;
-            border: 1px solid #2C2C2C;
+            border: 1px solid #2A2A2A;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-            transition: transform 0.2s, border-color 0.2s;
+            transition: border-color 0.2s;
             display: flex;
             flex-direction: column;
         }
 
         .tier-card:hover {
-            border-color: #BB86FC;
-            transform: translateY(-5px);
+            border-color: #3B82F6;
         }
 
         .tier-header {
             padding: 20px;
             text-align: center;
-            border-bottom: 1px solid #2C2C2C;
-            background: linear-gradient(145deg, #1F1F1F, #181818);
+            border-bottom: 1px solid #2A2A2A;
+            background: #1E1E1E;
         }
 
         .tier-name {
@@ -108,14 +119,15 @@
             color: #FFFFFF;
         }
 
-        /* Список игроков */
+        /* Общий контейнер списка (для Tier 1 и Tier 3) */
         .players-list {
             padding: 16px;
             flex: 1;
-            max-height: 500px;
+            max-height: 600px;
             overflow-y: auto;
             scrollbar-width: thin;
-            scrollbar-color: #BB86FC #2C2C2C;
+            scrollbar-color: #3B82F6 #2A2A2A;
+            scroll-behavior: smooth;
         }
 
         .players-list::-webkit-scrollbar {
@@ -123,47 +135,106 @@
         }
 
         .players-list::-webkit-scrollbar-track {
-            background: #2C2C2C;
+            background: #2A2A2A;
             border-radius: 10px;
         }
 
         .players-list::-webkit-scrollbar-thumb {
-            background: #BB86FC;
+            background: #3B82F6;
             border-radius: 10px;
         }
 
         .players-list::-webkit-scrollbar-thumb:hover {
-            background: #d0a2ff;
+            background: #2563eb;
         }
 
+        /* Специально для Tier 2 — три колонки */
+        .tier2-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding: 16px;
+        }
+
+        .sub-tier-column {
+            background-color: #1E1E1E;
+            border-radius: 16px;
+            border: 1px solid #2A2A2A;
+            overflow: hidden;
+        }
+
+        .sub-tier-header {
+            padding: 12px;
+            text-align: center;
+            background-color: #252525;
+            border-bottom: 1px solid #2A2A2A;
+            font-weight: 600;
+            color: #3B82F6;
+        }
+
+        /* Стили для списков внутри подтиров — ИСПРАВЛЕНО */
+        .sub-tier-list {
+            padding: 8px;
+            max-height: 500px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #3B82F6 #2A2A2A;
+        }
+
+        .sub-tier-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sub-tier-list::-webkit-scrollbar-track {
+            background: #2A2A2A;
+            border-radius: 10px;
+        }
+
+        .sub-tier-list::-webkit-scrollbar-thumb {
+            background: #3B82F6;
+            border-radius: 10px;
+        }
+
+        .sub-tier-list::-webkit-scrollbar-thumb:hover {
+            background: #2563eb;
+        }
+
+        /* Карточка игрока */
         .player-item {
             display: flex;
             align-items: center;
-            padding: 12px 14px;
-            background-color: #252525;
-            border-radius: 16px;
-            margin-bottom: 8px;
-            border: 1px solid #333;
+            padding: 8px 10px;
+            background-color: #222;
+            border-radius: 10px;
+            margin-bottom: 6px;
+            border: 2px solid transparent;
             transition: background 0.2s, border-color 0.2s;
+            scroll-margin: 20px;
         }
 
         .player-item:hover {
-            background-color: #2D2D2D;
-            border-color: #BB86FC;
+            background-color: #2A2A2A;
+            border-color: #3B82F6;
+        }
+
+        .player-item.highlight {
+            border-color: #3B82F6;
+            background-color: #2A3A50;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
         }
 
         .player-rank {
-            width: 32px;
-            height: 32px;
-            background-color: #BB86FC;
-            color: #0F0F0F;
+            width: 26px;
+            height: 26px;
+            background-color: #3B82F6;
+            color: white;
             font-weight: 700;
-            border-radius: 10px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 15px;
-            font-size: 14px;
+            margin-right: 10px;
+            font-size: 12px;
             flex-shrink: 0;
         }
 
@@ -171,24 +242,29 @@
             font-weight: 500;
             word-break: break-word;
             color: #F0F0F0;
+            font-size: 14px;
         }
 
-        /* Сообщение, если игроков нет */
         .empty-message {
             text-align: center;
             color: #6B6B6B;
-            padding: 30px 0;
+            padding: 20px 0;
             font-style: italic;
         }
 
         /* Адаптивность */
-        @media (max-width: 900px) {
+        @media (max-width: 1200px) {
             .tiers-grid {
                 grid-template-columns: 1fr;
-                gap: 20px;
             }
-            .search-wrapper {
-                max-width: 100%;
+            .tier2-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 800px) {
+            .tier2-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -199,25 +275,33 @@
         <div class="search-container">
             <div class="search-wrapper">
                 <span class="search-icon">🔍</span>
-                <input type="text" id="searchInput" placeholder="Поиск игрока...">
+                <input type="text" id="searchInput" placeholder="Введите ник игрока...">
+            </div>
+            <div class="search-hint">
+                <span>⏎</span> Начните печатать — страница найдет и подсветит игрока
             </div>
         </div>
 
-        <!-- Тиры -->
-        <div class="tiers-grid" id="tiersContainer">
-            <div class="tier-card" data-tier="1">
+        <!-- Три основных тира -->
+        <div class="tiers-grid">
+            <!-- Tier 1 -->
+            <div class="tier-card">
                 <div class="tier-header">
                     <div class="tier-name">TIER 1</div>
                 </div>
                 <div class="players-list" id="tier1List"></div>
             </div>
-            <div class="tier-card" data-tier="2">
+
+            <!-- Tier 2 (три колонки) -->
+            <div class="tier-card">
                 <div class="tier-header">
                     <div class="tier-name">TIER 2</div>
                 </div>
-                <div class="players-list" id="tier2List"></div>
+                <div class="tier2-grid" id="tier2Container"></div>
             </div>
-            <div class="tier-card" data-tier="3">
+
+            <!-- Tier 3 -->
+            <div class="tier-card">
                 <div class="tier-header">
                     <div class="tier-name">TIER 3</div>
                 </div>
@@ -227,74 +311,189 @@
     </div>
 
     <script>
-        // Список игроков
+        // Список игроков (оригинальные + добавленные)
         const players = [
+            // Оригинальные
             "dyaleo57", "hal98", "shad1w", "noteflight", "Shio",
             "iKannaTense", "RoiNest", ".DmiVob.", "xarlauss", "ZawaZawa",
             "kyrksha", "kapkaka", "Gibson", "force.major", "TUY",
             "grofine", "Rene", "dima_rusin", "Anlo", "JakeLife",
             "HornyRatio", "tetsuyabtw", "kykan_velikana", "Kazuto", "Abeno",
-            "Sephira", "Flavik", "hiyori"
+            "Sephira", "Flavik", "hiyori",
+            
+            // Добавленные 70+ ников
+            "NightStalker", "MoonShadow", "SunWarrior", "BladeMaster", "DarkWizard",
+            "LightBringer", "StormCaller", "FireLord", "IceQueen", "EarthShaker",
+            "WindWalker", "ThunderGod", "SilentAssassin", "CrimsonReaper", "ShadowBlade",
+            "PhoenixFire", "DragonSoul", "TigerClaw", "WolfFang", "EagleEye",
+            "ViperStrike", "FalconPunch", "DemonHunter", "AngelWings", "ChaosKnight",
+            "OrderPaladin", "RogueAgent", "MageLord", "Priestess", "DruidCircle",
+            "HunterX", "Berserker", "Valkyrie", "SamuraiJack", "NinjaGaiden",
+            "RoninWarrior", "ShogunTotal", "Emperor", "KingSlayer", "QueenBee",
+            "PrinceCharming", "PrincessPeach", "JokerWild", "RiddleMaster", "EnigmaCode",
+            "MysteryBox", "PuzzlePiece", "LogicGate", "BinaryCode", "QuantumBit",
+            "NeuralNet", "DeepMind", "AI_Overlord", "CyberPunk", "NeonGenesis",
+            "TokyoDrift", "OsakaSun", "KyotoRain", "SapporoSnow", "NagoyaCastle",
+            "HokkaidoFox", "OkinawaTurtle", "FujiMountain", "SakuraBlossom", "MatchaTea",
+            "SushiRoll", "RamenNoodle", "TempuraShrimp", "MochiSweet", "WasabiSpice",
+            "MisoSoup", "TofuSoft", "EdamameBean", "GyozaDumpling", "TakoyakiBall",
+            "YakisobaNoodle", "Okonomiyaki", "DangoSweet", "AnpanBread", "CurryRice",
+            
+            // Еще немного
+            "ZenMaster", "KungFuPanda", "DragonWarrior", "SilentBob", "VioletEvergarden",
+            "SpikeSpiegel", "JetBlack", "FayeValentine", "EdWard", "EinDog"
         ];
 
         // Текущее распределение
-        let currentTiers = { tier1: [], tier2: [], tier3: [] };
+        let tiers = {
+            tier1: [],
+            tier2: { tier1: [], tier2: [], tier3: [] },
+            tier3: []
+        };
 
         // Функция случайного распределения
-        function shuffleAndSplit(arr) {
-            const shuffled = [...arr].sort(() => Math.random() - 0.5);
+        function distributeRandomly() {
+            const shuffled = [...players].sort(() => Math.random() - 0.5);
             const chunkSize = Math.ceil(shuffled.length / 3);
+            const mainTier1 = shuffled.slice(0, chunkSize);
+            const mainTier2 = shuffled.slice(chunkSize, chunkSize * 2);
+            const mainTier3 = shuffled.slice(chunkSize * 2);
+
+            const tier2Shuffled = [...mainTier2].sort(() => Math.random() - 0.5);
+            const subChunk = Math.ceil(tier2Shuffled.length / 3);
+
             return {
-                tier1: shuffled.slice(0, chunkSize),
-                tier2: shuffled.slice(chunkSize, chunkSize * 2),
-                tier3: shuffled.slice(chunkSize * 2)
+                tier1: mainTier1,
+                tier2: {
+                    tier1: tier2Shuffled.slice(0, subChunk),
+                    tier2: tier2Shuffled.slice(subChunk, subChunk * 2),
+                    tier3: tier2Shuffled.slice(subChunk * 2)
+                },
+                tier3: mainTier3
             };
         }
 
-        // Рендер списка с учётом поиска
-        function renderTier(listElement, playersArray, searchTerm) {
-            listElement.innerHTML = '';
+        // Рендер обычного списка
+        function renderSimpleList(elementId, playersArray) {
+            const container = document.getElementById(elementId);
+            container.innerHTML = '';
 
-            // Сортируем по алфавиту
-            const sorted = [...playersArray].sort((a, b) => a.localeCompare(b));
-
-            // Фильтруем по поиску
-            const filtered = sorted.filter(name => 
-                name.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-
-            if (filtered.length === 0) {
-                listElement.innerHTML = '<div class="empty-message">— пусто —</div>';
+            if (!playersArray || playersArray.length === 0) {
+                container.innerHTML = '<div class="empty-message">— пусто —</div>';
                 return;
             }
 
-            filtered.forEach((player, index) => {
+            const sorted = [...playersArray].sort((a, b) => a.localeCompare(b));
+
+            sorted.forEach((player, index) => {
                 const item = document.createElement('div');
                 item.className = 'player-item';
+                item.setAttribute('data-player', player);
                 item.innerHTML = `
                     <div class="player-rank">${index + 1}</div>
                     <span class="player-name">${player}</span>
                 `;
-                listElement.appendChild(item);
+                container.appendChild(item);
             });
         }
 
-        // Обновление всех тиров
-        function updateAllTiers(searchTerm = '') {
-            renderTier(document.getElementById('tier1List'), currentTiers.tier1, searchTerm);
-            renderTier(document.getElementById('tier2List'), currentTiers.tier2, searchTerm);
-            renderTier(document.getElementById('tier3List'), currentTiers.tier3, searchTerm);
+        // Рендер Tier 2
+        function renderTier2(containerId, subTiers) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+
+            const tierKeys = [
+                { key: 'tier1', label: 'TIER 1' },
+                { key: 'tier2', label: 'TIER 2' },
+                { key: 'tier3', label: 'TIER 3' }
+            ];
+
+            tierKeys.forEach(t => {
+                const playersInSub = subTiers[t.key] || [];
+                const sorted = [...playersInSub].sort((a, b) => a.localeCompare(b));
+
+                const column = document.createElement('div');
+                column.className = 'sub-tier-column';
+
+                const header = document.createElement('div');
+                header.className = 'sub-tier-header';
+                header.textContent = t.label;
+
+                const listDiv = document.createElement('div');
+                listDiv.className = 'sub-tier-list';
+
+                if (sorted.length === 0) {
+                    listDiv.innerHTML = '<div class="empty-message">— пусто —</div>';
+                } else {
+                    sorted.forEach((player, idx) => {
+                        const playerItem = document.createElement('div');
+                        playerItem.className = 'player-item';
+                        playerItem.setAttribute('data-player', player);
+                        playerItem.innerHTML = `
+                            <div class="player-rank">${idx + 1}</div>
+                            <span class="player-name">${player}</span>
+                        `;
+                        listDiv.appendChild(playerItem);
+                    });
+                }
+
+                column.appendChild(header);
+                column.appendChild(listDiv);
+                container.appendChild(column);
+            });
         }
 
-        // Инициализация (случайное распределение)
-        function init() {
-            currentTiers = shuffleAndSplit(players);
-            updateAllTiers();
+        // Поиск и подсветка
+        let highlightTimeout = null;
 
-            // Поиск
+        function findAndHighlightPlayer(searchTerm) {
+            document.querySelectorAll('.player-item.highlight').forEach(el => {
+                el.classList.remove('highlight');
+            });
+
+            if (!searchTerm || searchTerm.length < 1) return;
+
+            const lowerSearch = searchTerm.toLowerCase();
+            const allPlayers = document.querySelectorAll('.player-item');
+            let targetElement = null;
+
+            for (let el of allPlayers) {
+                const playerName = el.getAttribute('data-player') || '';
+                if (playerName.toLowerCase().includes(lowerSearch)) {
+                    targetElement = el;
+                    break;
+                }
+            }
+
+            if (targetElement) {
+                targetElement.classList.add('highlight');
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+
+                if (highlightTimeout) clearTimeout(highlightTimeout);
+                highlightTimeout = setTimeout(() => {
+                    targetElement.classList.remove('highlight');
+                }, 3000);
+            }
+        }
+
+        // Обновление всех тиров
+        function renderAll() {
+            renderSimpleList('tier1List', tiers.tier1);
+            renderTier2('tier2Container', tiers.tier2);
+            renderSimpleList('tier3List', tiers.tier3);
+        }
+
+        // Инициализация
+        function init() {
+            tiers = distributeRandomly();
+            renderAll();
+
             const searchInput = document.getElementById('searchInput');
             searchInput.addEventListener('input', (e) => {
-                updateAllTiers(e.target.value);
+                findAndHighlightPlayer(e.target.value);
             });
         }
 
