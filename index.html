@@ -311,9 +311,6 @@
     </div>
 
     <script>
-        // ⚠️ ВСТАВЬ СЮДА СВОЮ ССЫЛКУ НА ВЕБ-ПРИЛОЖЕНИЕ ⚠️
-        const API_URL = 'https://script.google.com/macros/s/AKfycbxo-EHKV_-AneAKpA8BOx_aQ0_icKS42Ad7-6Qy_B_O6KVSqdMYJJxDYjgOBcp4VZLdcA/exec';
-
         // Текущее распределение
         let tiers = {
             tier1: [],
@@ -321,54 +318,59 @@
             tier3: []
         };
 
-        // Загрузка данных из Google Таблицы
-        async function loadPlayersFromSheet() {
+        // Функция распределения игроков по тирам
+        function distributePlayers(players) {
+            // Очищаем текущие тиры
+            tiers = {
+                tier1: [],
+                tier2: { tier1: [], tier2: [], tier3: [] },
+                tier3: []
+            };
+            
+            // Распределяем игроков согласно их значениям
+            players.forEach(p => {
+                const tier = p.tier;
+                const name = p.name;
+                
+                if (!name || !tier) return;
+                
+                // Tier 1
+                if (tier === '1') {
+                    tiers.tier1.push(name);
+                }
+                // Tier 3
+                else if (tier === '3') {
+                    tiers.tier3.push(name);
+                }
+                // Tier 2 с подтирами
+                else if (tier.startsWith('2.')) {
+                    const sub = tier.split('.')[1];
+                    if (sub === '1') tiers.tier2.tier1.push(name);
+                    else if (sub === '2') tiers.tier2.tier2.push(name);
+                    else if (sub === '3') tiers.tier2.tier3.push(name);
+                }
+            });
+            
+            // Обновляем отображение
+            renderAll();
+        }
+
+        // Загрузка данных из локального JSON-файла
+        async function loadPlayers() {
             try {
-                const response = await fetch(API_URL);
+                // Пытаемся загрузить локальный JSON-файл
+                const response = await fetch('data/players.json');
                 const players = await response.json();
-                console.log('Ответ от API:', players);
-                // Очищаем текущие тиры
-                tiers = {
-                    tier1: [],
-                    tier2: { tier1: [], tier2: [], tier3: [] },
-                    tier3: []
-                };
                 
-                // Распределяем игроков по тирам согласно их значениям
-                players.forEach(p => {
-                    const tier = p.tier;
-                    const name = p.name;
-                    
-                    if (!name || !tier) return; // пропускаем пустые
-                    
-                    // Tier 1
-                    if (tier === '1') {
-                        tiers.tier1.push(name);
-                    }
-                    // Tier 3
-                    else if (tier === '3') {
-                        tiers.tier3.push(name);
-                    }
-                    // Tier 2 с подтирами
-                    else if (tier.startsWith('2.')) {
-                        const sub = tier.split('.')[1];
-                        if (sub === '1') tiers.tier2.tier1.push(name);
-                        else if (sub === '2') tiers.tier2.tier2.push(name);
-                        else if (sub === '3') tiers.tier2.tier3.push(name);
-                        // Игнорируем 2.4, 2.5 и т.д.
-                    }
-                    // Игроки с типом '2' (без подтира) — можно добавить в tier2.tier1 или игнорировать
-                    // По желанию: else if (tier === '2') { tiers.tier2.tier1.push(name); }
-                });
-                
-                // Обновляем отображение
-                renderAll();
+                // Распределяем игроков по тирам
+                distributePlayers(players);
                 
             } catch (error) {
-                console.error('Ошибка загрузки данных:', error);
-                // Показываем сообщение об ошибке
-                document.getElementById('tier1List').innerHTML = '<div class="empty-message">❌ Ошибка загрузки</div>';
-                document.getElementById('tier3List').innerHTML = '<div class="empty-message">❌ Ошибка загрузки</div>';
+                console.error('Ошибка загрузки:', error);
+                // Если файла нет (первый запуск), показываем ошибку
+                document.getElementById('tier1List').innerHTML = '<div class="empty-message">❌ Данные ещё не загружены</div>';
+                document.getElementById('tier2Container').innerHTML = '<div class="empty-message">❌ Данные ещё не загружены</div>';
+                document.getElementById('tier3List').innerHTML = '<div class="empty-message">❌ Данные ещё не загружены</div>';
             }
         }
 
@@ -487,7 +489,7 @@
 
         // Инициализация
         async function init() {
-            await loadPlayersFromSheet(); // загружаем данные из таблицы
+            await loadPlayers(); // загружаем данные из локального файла
 
             const searchInput = document.getElementById('searchInput');
             searchInput.addEventListener('input', (e) => {
