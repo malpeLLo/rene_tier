@@ -30,3 +30,6 @@ jobs:
           # Проверяем, есть ли изменения (чтобы не создавать пустые коммиты)
           git diff --quiet && git diff --staged --quiet || git commit -m "Auto-update players data"
           git push
+        env:
+          # Используем токен из секретов
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
