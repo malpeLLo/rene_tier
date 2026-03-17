@@ -172,7 +172,7 @@
             color: #3B82F6;
         }
 
-        /* Стили для списков внутри подтиров — ИСПРАВЛЕНО */
+        /* Стили для списков внутри подтиров */
         .sub-tier-list {
             padding: 8px;
             max-height: 500px;
@@ -311,38 +311,8 @@
     </div>
 
     <script>
-        // Список игроков (оригинальные + добавленные)
-        const players = [
-            // Оригинальные
-            "dyaleo57", "hal98", "shad1w", "noteflight", "Shio",
-            "iKannaTense", "RoiNest", ".DmiVob.", "xarlauss", "ZawaZawa",
-            "kyrksha", "kapkaka", "Gibson", "force.major", "TUY",
-            "grofine", "Rene", "dima_rusin", "Anlo", "JakeLife",
-            "HornyRatio", "tetsuyabtw", "kykan_velikana", "Kazuto", "Abeno",
-            "Sephira", "Flavik", "hiyori",
-            
-            // Добавленные 70+ ников
-            "NightStalker", "MoonShadow", "SunWarrior", "BladeMaster", "DarkWizard",
-            "LightBringer", "StormCaller", "FireLord", "IceQueen", "EarthShaker",
-            "WindWalker", "ThunderGod", "SilentAssassin", "CrimsonReaper", "ShadowBlade",
-            "PhoenixFire", "DragonSoul", "TigerClaw", "WolfFang", "EagleEye",
-            "ViperStrike", "FalconPunch", "DemonHunter", "AngelWings", "ChaosKnight",
-            "OrderPaladin", "RogueAgent", "MageLord", "Priestess", "DruidCircle",
-            "HunterX", "Berserker", "Valkyrie", "SamuraiJack", "NinjaGaiden",
-            "RoninWarrior", "ShogunTotal", "Emperor", "KingSlayer", "QueenBee",
-            "PrinceCharming", "PrincessPeach", "JokerWild", "RiddleMaster", "EnigmaCode",
-            "MysteryBox", "PuzzlePiece", "LogicGate", "BinaryCode", "QuantumBit",
-            "NeuralNet", "DeepMind", "AI_Overlord", "CyberPunk", "NeonGenesis",
-            "TokyoDrift", "OsakaSun", "KyotoRain", "SapporoSnow", "NagoyaCastle",
-            "HokkaidoFox", "OkinawaTurtle", "FujiMountain", "SakuraBlossom", "MatchaTea",
-            "SushiRoll", "RamenNoodle", "TempuraShrimp", "MochiSweet", "WasabiSpice",
-            "MisoSoup", "TofuSoft", "EdamameBean", "GyozaDumpling", "TakoyakiBall",
-            "YakisobaNoodle", "Okonomiyaki", "DangoSweet", "AnpanBread", "CurryRice",
-            
-            // Еще немного
-            "ZenMaster", "KungFuPanda", "DragonWarrior", "SilentBob", "VioletEvergarden",
-            "SpikeSpiegel", "JetBlack", "FayeValentine", "EdWard", "EinDog"
-        ];
+        // ⚠️ ВСТАВЬ СЮДА СВОЮ ССЫЛКУ НА ВЕБ-ПРИЛОЖЕНИЕ ⚠️
+        const API_URL = 'https://script.google.com/macros/s/AKfycbxo-EHKV_-AneAKpA8BOx_aQ0_icKS42Ad7-6Qy_B_O6KVSqdMYJJxDYjgOBcp4VZLdcA/exec';
 
         // Текущее распределение
         let tiers = {
@@ -351,29 +321,58 @@
             tier3: []
         };
 
-        // Функция случайного распределения
-        function distributeRandomly() {
-            const shuffled = [...players].sort(() => Math.random() - 0.5);
-            const chunkSize = Math.ceil(shuffled.length / 3);
-            const mainTier1 = shuffled.slice(0, chunkSize);
-            const mainTier2 = shuffled.slice(chunkSize, chunkSize * 2);
-            const mainTier3 = shuffled.slice(chunkSize * 2);
-
-            const tier2Shuffled = [...mainTier2].sort(() => Math.random() - 0.5);
-            const subChunk = Math.ceil(tier2Shuffled.length / 3);
-
-            return {
-                tier1: mainTier1,
-                tier2: {
-                    tier1: tier2Shuffled.slice(0, subChunk),
-                    tier2: tier2Shuffled.slice(subChunk, subChunk * 2),
-                    tier3: tier2Shuffled.slice(subChunk * 2)
-                },
-                tier3: mainTier3
-            };
+        // Загрузка данных из Google Таблицы
+        async function loadPlayersFromSheet() {
+            try {
+                const response = await fetch(API_URL);
+                const players = await response.json();
+                console.log('Ответ от API:', players);
+                // Очищаем текущие тиры
+                tiers = {
+                    tier1: [],
+                    tier2: { tier1: [], tier2: [], tier3: [] },
+                    tier3: []
+                };
+                
+                // Распределяем игроков по тирам согласно их значениям
+                players.forEach(p => {
+                    const tier = p.tier;
+                    const name = p.name;
+                    
+                    if (!name || !tier) return; // пропускаем пустые
+                    
+                    // Tier 1
+                    if (tier === '1') {
+                        tiers.tier1.push(name);
+                    }
+                    // Tier 3
+                    else if (tier === '3') {
+                        tiers.tier3.push(name);
+                    }
+                    // Tier 2 с подтирами
+                    else if (tier.startsWith('2.')) {
+                        const sub = tier.split('.')[1];
+                        if (sub === '1') tiers.tier2.tier1.push(name);
+                        else if (sub === '2') tiers.tier2.tier2.push(name);
+                        else if (sub === '3') tiers.tier2.tier3.push(name);
+                        // Игнорируем 2.4, 2.5 и т.д.
+                    }
+                    // Игроки с типом '2' (без подтира) — можно добавить в tier2.tier1 или игнорировать
+                    // По желанию: else if (tier === '2') { tiers.tier2.tier1.push(name); }
+                });
+                
+                // Обновляем отображение
+                renderAll();
+                
+            } catch (error) {
+                console.error('Ошибка загрузки данных:', error);
+                // Показываем сообщение об ошибке
+                document.getElementById('tier1List').innerHTML = '<div class="empty-message">❌ Ошибка загрузки</div>';
+                document.getElementById('tier3List').innerHTML = '<div class="empty-message">❌ Ошибка загрузки</div>';
+            }
         }
 
-        // Рендер обычного списка
+        // Рендер обычного списка (Tier 1 и Tier 3)
         function renderSimpleList(elementId, playersArray) {
             const container = document.getElementById(elementId);
             container.innerHTML = '';
@@ -397,7 +396,7 @@
             });
         }
 
-        // Рендер Tier 2
+        // Рендер Tier 2 (три колонки)
         function renderTier2(containerId, subTiers) {
             const container = document.getElementById(containerId);
             container.innerHTML = '';
@@ -487,9 +486,8 @@
         }
 
         // Инициализация
-        function init() {
-            tiers = distributeRandomly();
-            renderAll();
+        async function init() {
+            await loadPlayersFromSheet(); // загружаем данные из таблицы
 
             const searchInput = document.getElementById('searchInput');
             searchInput.addEventListener('input', (e) => {
