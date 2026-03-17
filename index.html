@@ -357,20 +357,18 @@
 
         // Загрузка данных из локального JSON-файла
         async function loadPlayers() {
+            console.log('1. Начинаем загрузку');
             try {
-                // Пытаемся загрузить локальный JSON-файл
                 const response = await fetch('data/players.json');
                 const players = await response.json();
+                console.log('2. Получили игроков:', players);
                 
-                // Распределяем игроков по тирам
+                console.log('3. Вызываем distributePlayers');
                 distributePlayers(players);
+                console.log('4. После distributePlayers, tiers:', tiers);
                 
             } catch (error) {
-                console.error('Ошибка загрузки:', error);
-                // Если файла нет (первый запуск), показываем ошибку
-                document.getElementById('tier1List').innerHTML = '<div class="empty-message">❌ Данные ещё не загружены</div>';
-                document.getElementById('tier2Container').innerHTML = '<div class="empty-message">❌ Данные ещё не загружены</div>';
-                document.getElementById('tier3List').innerHTML = '<div class="empty-message">❌ Данные ещё не загружены</div>';
+                console.error('Ошибка:', error);
             }
         }
 
