@@ -358,37 +358,19 @@
         // Загрузка данных из локального JSON-файла
         async function loadPlayers() {
             try {
-                // Жёстко отключаем кеш заголовками
-                const response = await fetch('data/players.json', {
-                    headers: {
-                        'Cache-Control': 'no-cache, no-store, must-revalidate',
-                        'Pragma': 'no-cache',
-                        'Expires': '0'
-                    },
-                    cache: 'no-store' // полностью отключаем кеширование
-                });
-                
-                // Проверяем ответ
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
+                // Пытаемся загрузить локальный JSON-файл
+                const response = await fetch('data/players.json');
                 const players = await response.json();
-                console.log('Загружено игроков:', players.length);
                 
-                // Принудительно обновляем DOM
+                // Распределяем игроков по тирам
                 distributePlayers(players);
                 
             } catch (error) {
                 console.error('Ошибка загрузки:', error);
-                
-                // Показываем ошибку
-                document.getElementById('tier1List').innerHTML = 
-                    `<div class="empty-message">❌ Ошибка загрузки данных</div>`;
-                document.getElementById('tier2Container').innerHTML = 
-                    `<div class="empty-message">❌ ${error.message}</div>`;
-                document.getElementById('tier3List').innerHTML = 
-                    `<div class="empty-message">❌ Проверь консоль</div>`;
+                // Если файла нет (первый запуск), показываем ошибку
+                document.getElementById('tier1List').innerHTML = '<div class="empty-message">❌ Данные ещё не загружены</div>';
+                document.getElementById('tier2Container').innerHTML = '<div class="empty-message">❌ Данные ещё не загружены</div>';
+                document.getElementById('tier3List').innerHTML = '<div class="empty-message">❌ Данные ещё не загружены</div>';
             }
         }
 
