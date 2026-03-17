@@ -359,7 +359,7 @@
         async function loadPlayers() {
             console.log('1. Начинаем загрузку');
             try {
-                const response = await fetch('data/players.json');
+                const url = 'data/players.json?t=' + Math.random();
                 const players = await response.json();
                 console.log('2. Получили игроков:', players);
                 
