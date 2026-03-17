@@ -2,34 +2,29 @@ name: Update players data
 
 on:
   schedule:
-    # Запуск каждый час (в 0 минут каждого часа)
     - cron: '0 * * * *'
-  # Возможность запустить вручную из интерфейса GitHub
   workflow_dispatch:
+
+# Даём права на запись
+permissions:
+  contents: write
 
 jobs:
   update-data:
     runs-on: ubuntu-latest
     
     steps:
-      # 1. Скачиваем код репозитория
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. Запрашиваем данные из твоего Google Apps Script
       - name: Fetch data from Google Sheets
         run: |
           curl -o data/players.json "https://script.google.com/macros/s/AKfycbxo-EHKV_-AneAKpA8BOx_aQ0_icKS42Ad7-6Qy_B_O6KVSqdMYJJxDYjgOBcp4VZLdcA/exec"
 
-      # 3. Проверяем, изменился ли файл, и сохраняем обратно в репозиторий
       - name: Commit and push if changed
         run: |
-          git config --global user.name 'GitHub Bot'
-          git config --global user.email 'bot@github.com'
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add data/players.json
-          # Проверяем, есть ли изменения (чтобы не создавать пустые коммиты)
           git diff --quiet && git diff --staged --quiet || git commit -m "Auto-update players data"
           git push
-        env:
-          # Используем токен из секретов
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
