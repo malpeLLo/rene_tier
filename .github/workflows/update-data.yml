@@ -2,7 +2,7 @@ name: Update players data
 
 on:
   schedule:
-    - cron: '0 * * * *'
+    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 # Даём права на запись
