@@ -29,4 +29,4 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add data/players.json
           git diff --quiet && git diff --staged --quiet || git commit -m "Auto-update players data"
-          git push origin colorful   # 👈 Пушим именно в colorful
+          git push origin HEAD:colorful
