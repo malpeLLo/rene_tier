@@ -16,36 +16,33 @@
             background-color: #0A0A0A;
             color: #EDEDED;
             min-height: 100vh;
-            padding: 30px 20px;
+            padding: 0;
         }
-		.search-container {
-			position: sticky;
-			top: 0;
-			z-index: 1000;
-			background-color: #0A0A0A;
-			padding: 20px 0;
-			margin-bottom: 20px;
-			border-bottom: 1px solid #2A2A2A;
-			backdrop-filter: blur(10px);
-			background-color: rgba(10, 10, 10, 0.95);
-		}
 
-		/* Чтобы контент не прятался под поиском */
-		.tiers-grid {
-			scroll-margin-top: 100px;
-		}
         .container {
             max-width: 1600px;
             margin: 0 auto;
+            padding: 30px 20px;
         }
 
-        /* ----- Поиск ----- */
+        /* ----- Закреплённый поиск ----- */
         .search-container {
-            margin-bottom: 40px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            margin: -30px -20px 20px -20px;
+            border-bottom: 1px solid #2A2A2A;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 10px;
+        }
+
+        .container {
+            padding-top: 0;
         }
 
         .search-wrapper {
@@ -116,15 +113,38 @@
             flex-direction: column;
         }
 
-        .tier-card:hover {
-            border-color: #3B82F6;
+        /* Цвета для основных тиров */
+        .tier-card.tier-1 .tier-header {
+            background: linear-gradient(135deg, #8B0000 0%, #5a0000 100%);
+            border-bottom-color: #ff4444;
+        }
+
+        .tier-card.tier-2 .tier-header {
+            background: linear-gradient(135deg, #0a3a5a 0%, #052a40 100%);
+            border-bottom-color: #3b82f6;
+        }
+
+        .tier-card.tier-3 .tier-header {
+            background: linear-gradient(135deg, #1a5a2a 0%, #0f3a1a 100%);
+            border-bottom-color: #4ade80;
+        }
+
+        .tier-card.tier-1:hover {
+            border-color: #ff4444;
+        }
+
+        .tier-card.tier-2:hover {
+            border-color: #3b82f6;
+        }
+
+        .tier-card.tier-3:hover {
+            border-color: #4ade80;
         }
 
         .tier-header {
             padding: 20px;
             text-align: center;
             border-bottom: 1px solid #2A2A2A;
-            background: #1E1E1E;
         }
 
         .tier-name {
@@ -132,6 +152,19 @@
             font-weight: 700;
             letter-spacing: 0.5px;
             color: #FFFFFF;
+        }
+
+        /* Цвета для рангов в основных тирах */
+        .tier-1 .player-rank {
+            background-color: #ff4444;
+        }
+
+        .tier-2 .player-rank {
+            background-color: #3b82f6;
+        }
+
+        .tier-3 .player-rank {
+            background-color: #4ade80;
         }
 
         /* Общий контейнер списка (для Tier 1 и Tier 3) */
@@ -178,16 +211,42 @@
             overflow: hidden;
         }
 
+        /* Цвета для подтиров (A, B, C) */
+        .sub-tier-column[data-sub="A"] .sub-tier-header {
+            background: linear-gradient(135deg, #8B0000 0%, #5a0000 100%);
+            color: white;
+        }
+
+        .sub-tier-column[data-sub="B"] .sub-tier-header {
+            background: linear-gradient(135deg, #0a3a5a 0%, #052a40 100%);
+            color: white;
+        }
+
+        .sub-tier-column[data-sub="C"] .sub-tier-header {
+            background: linear-gradient(135deg, #1a5a2a 0%, #0f3a1a 100%);
+            color: white;
+        }
+
+        /* Цвета для рангов в подтирах */
+        .sub-tier-column[data-sub="A"] .player-rank {
+            background-color: #ff4444;
+        }
+
+        .sub-tier-column[data-sub="B"] .player-rank {
+            background-color: #3b82f6;
+        }
+
+        .sub-tier-column[data-sub="C"] .player-rank {
+            background-color: #4ade80;
+        }
+
         .sub-tier-header {
             padding: 12px;
             text-align: center;
-            background-color: #252525;
             border-bottom: 1px solid #2A2A2A;
             font-weight: 600;
-            color: #3B82F6;
         }
 
-        /* Стили для списков внутри подтиров */
         .sub-tier-list {
             padding: 8px;
             max-height: 500px;
@@ -241,7 +300,6 @@
         .player-rank {
             width: 26px;
             height: 26px;
-            background-color: #3B82F6;
             color: white;
             font-weight: 700;
             border-radius: 6px;
@@ -286,7 +344,7 @@
 </head>
 <body>
     <div class="container">
-        <!-- Поиск -->
+        <!-- Закреплённый поиск -->
         <div class="search-container">
             <div class="search-wrapper">
                 <span class="search-icon">🔍</span>
@@ -297,26 +355,26 @@
             </div>
         </div>
 
-        <!-- Три основных тира -->
+        <!-- Три основных тира с цветами -->
         <div class="tiers-grid">
-            <!-- Tier 1 -->
-            <div class="tier-card">
+            <!-- Tier 1 (красный) -->
+            <div class="tier-card tier-1">
                 <div class="tier-header">
                     <div class="tier-name">TIER 1</div>
                 </div>
                 <div class="players-list" id="tier1List"></div>
             </div>
 
-            <!-- Tier 2 (три колонки) -->
-            <div class="tier-card">
+            <!-- Tier 2 (синий) -->
+            <div class="tier-card tier-2">
                 <div class="tier-header">
                     <div class="tier-name">TIER 2</div>
                 </div>
                 <div class="tier2-grid" id="tier2Container"></div>
             </div>
 
-            <!-- Tier 3 -->
-            <div class="tier-card">
+            <!-- Tier 3 (зелёный) -->
+            <div class="tier-card tier-3">
                 <div class="tier-header">
                     <div class="tier-name">TIER 3</div>
                 </div>
@@ -344,25 +402,31 @@
             
             // Распределяем игроков согласно их значениям
             players.forEach(p => {
-                const tier = p.tier;
+                let tier = p.tier;
                 const name = p.name;
                 
                 if (!name || !tier) return;
                 
-                // Tier 1
-                if (tier === '1') {
+                // Преобразуем строку, вытаскиваем цифры
+                tier = String(tier).toLowerCase().trim();
+                
+                let cleanTier = '';
+                if (tier.includes('2.1')) cleanTier = '2.1';
+                else if (tier.includes('2.2')) cleanTier = '2.2';
+                else if (tier.includes('2.3')) cleanTier = '2.3';
+                else if (tier.includes('1')) cleanTier = '1';
+                else if (tier.includes('3')) cleanTier = '3';
+                
+                if (cleanTier === '1') {
                     tiers.tier1.push(name);
-                }
-                // Tier 3
-                else if (tier === '3') {
+                } else if (cleanTier === '3') {
                     tiers.tier3.push(name);
-                }
-                // Tier 2 с подтирами
-                else if (tier.startsWith('2.')) {
-                    const sub = tier.split('.')[1];
-                    if (sub === '1') tiers.tier2.tier1.push(name);
-                    else if (sub === '2') tiers.tier2.tier2.push(name);
-                    else if (sub === '3') tiers.tier2.tier3.push(name);
+                } else if (cleanTier === '2.1') {
+                    tiers.tier2.tier1.push(name);
+                } else if (cleanTier === '2.2') {
+                    tiers.tier2.tier2.push(name);
+                } else if (cleanTier === '2.3') {
+                    tiers.tier2.tier3.push(name);
                 }
             });
             
@@ -372,19 +436,16 @@
 
         // Загрузка данных из локального JSON-файла
         async function loadPlayers() {
-            console.log('1. Начинаем загрузку');
             try {
                 const url = 'data/players.json?t=' + Math.random();
                 const response = await fetch(url);
                 const players = await response.json();
-                console.log('2. Получили игроков:', players);
-                
-                console.log('3. Вызываем distributePlayers');
                 distributePlayers(players);
-                console.log('4. После distributePlayers, tiers:', tiers);
-                
             } catch (error) {
-                console.error('Ошибка:', error);
+                console.error('Ошибка загрузки:', error);
+                document.getElementById('tier1List').innerHTML = '<div class="empty-message">❌ Данные не загружены</div>';
+                document.getElementById('tier2Container').innerHTML = '<div class="empty-message">❌ Данные не загружены</div>';
+                document.getElementById('tier3List').innerHTML = '<div class="empty-message">❌ Данные не загружены</div>';
             }
         }
 
@@ -412,23 +473,27 @@
             });
         }
 
-        // Рендер Tier 2 (три колонки)
+        // Рендер Tier 2 (три колонки с цветными подтирами)
         function renderTier2(containerId, subTiers) {
             const container = document.getElementById(containerId);
             container.innerHTML = '';
 
             const tierKeys = [
-                { key: 'tier1', label: 'HIGH' },
-                { key: 'tier2', label: 'MID' },
-                { key: 'tier3', label: 'LOW' }
+                { key: 'tier1', label: 'TIER A' },
+                { key: 'tier2', label: 'TIER B' },
+                { key: 'tier3', label: 'TIER C' }
             ];
 
-            tierKeys.forEach(t => {
+            tierKeys.forEach((t, idx) => {
                 const playersInSub = subTiers[t.key] || [];
                 const sorted = [...playersInSub].sort((a, b) => a.localeCompare(b));
 
                 const column = document.createElement('div');
                 column.className = 'sub-tier-column';
+                // Добавляем атрибут для цвета
+                if (t.key === 'tier1') column.setAttribute('data-sub', 'A');
+                else if (t.key === 'tier2') column.setAttribute('data-sub', 'B');
+                else if (t.key === 'tier3') column.setAttribute('data-sub', 'C');
 
                 const header = document.createElement('div');
                 header.className = 'sub-tier-header';
@@ -503,7 +568,7 @@
 
         // Инициализация
         async function init() {
-            await loadPlayers(); // загружаем данные из локального файла
+            await loadPlayers();
 
             const searchInput = document.getElementById('searchInput');
             searchInput.addEventListener('input', (e) => {
