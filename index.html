@@ -3,8 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тиры игроков</title>
+    <title>Тиры игроков — High / Mid / Low</title>
     <style>
+        /* ==================== НАСТРОЙКА ЦВЕТОВ ==================== */
+        /* Все цвета вынесены в начало — меняйте здесь как хотите! */
+        :root {
+            /* ===== ЦВЕТА ОСНОВНЫХ ТИРОВ ===== */
+            --tier1-bg: #ea1e63;           /* Фон заголовка TIER 1 */
+            --tier2-bg: #59c3db;           /* Фон заголовка TIER 2 — синий */
+            --tier3-bg: #3eb386;           /* Фон заголовка TIER 3 */
+            
+            /* ===== ЦВЕТА ПОДТИРОВ TIER 2 ===== */
+            --high-bg: #59c3db;            /* HIGH — синий */
+            --mid-bg: #59c3db;              /* MID — синий */
+            --low-bg: #59c3db;             /* LOW — синий */
+            
+            /* ===== ЦВЕТА ЦИФР (рангов) ИГРОКОВ ===== */
+            --rank-tier1: #ea1e63;         /* Цвет цифр в TIER 1 */
+            --rank-tier2: #59c3db;          /* Цвет цифр в TIER 2 */
+            --rank-tier3: #3eb386;         /* Цвет цифр в TIER 3 */
+            --rank-high: #59c3db;           /* Цвет цифр в HIGH */
+            --rank-mid: #59c3db;            /* Цвет цифр в MID */
+            --rank-low: #59c3db;            /* Цвет цифр в LOW */
+            
+            /* ===== ЦВЕТА СКРОЛЛБАРА ===== */
+            --scrollbar-thumb: #3a3a3a;
+            --scrollbar-track: #1a1a1a;
+            --scrollbar-width: 6px;
+            
+            /* ===== АКЦЕНТНЫЙ ЦВЕТ ===== */
+            --accent: #EDEDED;
+            
+            /* ===== ФОНОВЫЕ ЦВЕТА ===== */
+            --bg-dark: #0A0A0A;
+            --bg-card: #141414;
+            --bg-subtier: #1E1E1E;
+            --bg-player: #222222;
+            --bg-player-hover: #2A2A2A;
+            --border-color: #2A2A2A;
+            
+            /* ===== ЦВЕТА ТЕКСТА ===== */
+            --text-primary: #EDEDED;
+            --text-secondary: #8A8F99;
+        }
+        
+        /* Применяем цвета к заголовкам тиров */
+        .tier-card.tier-1 .tier-header {
+            background: linear-gradient(135deg, var(--tier1-bg) 0%, color-mix(in srgb, var(--tier1-bg) 70%, black) 100%);
+            border-bottom-color: color-mix(in srgb, var(--tier1-bg) 70%, white);
+        }
+
+        .tier-card.tier-2 .tier-header {
+            background: linear-gradient(135deg, var(--tier2-bg) 0%, color-mix(in srgb, var(--tier2-bg) 70%, black) 100%);
+            border-bottom-color: color-mix(in srgb, var(--tier2-bg) 70%, white);
+        }
+
+        .tier-card.tier-3 .tier-header {
+            background: linear-gradient(135deg, var(--tier3-bg) 0%, color-mix(in srgb, var(--tier3-bg) 70%, black) 100%);
+            border-bottom-color: color-mix(in srgb, var(--tier3-bg) 70%, white);
+        }
+        
+        /* Применяем цвета к заголовкам подтиров */
+        .sub-tier-column[data-sub="HIGH"] .sub-tier-header {
+            background: linear-gradient(135deg, var(--high-bg) 0%, color-mix(in srgb, var(--high-bg) 70%, black) 100%);
+            border-bottom: 2px solid color-mix(in srgb, var(--high-bg) 70%, white);
+        }
+
+        .sub-tier-column[data-sub="MID"] .sub-tier-header {
+            background: linear-gradient(135deg, var(--mid-bg) 0%, color-mix(in srgb, var(--mid-bg) 70%, black) 100%);
+            border-bottom: 2px solid color-mix(in srgb, var(--mid-bg) 70%, white);
+        }
+
+        .sub-tier-column[data-sub="LOW"] .sub-tier-header {
+            background: linear-gradient(135deg, var(--low-bg) 0%, color-mix(in srgb, var(--low-bg) 70%, black) 100%);
+            border-bottom: 2px solid color-mix(in srgb, var(--low-bg) 70%, white);
+        }
+        
+        /* Применяем цвета к цифрам (рангам) игроков */
+        .tier-1 .player-rank {
+            background-color: var(--rank-tier1);
+        }
+
+        .tier-2 .player-rank {
+            background-color: var(--rank-tier2);
+        }
+
+        .tier-3 .player-rank {
+            background-color: var(--rank-tier3);
+        }
+
+        .sub-tier-column[data-sub="HIGH"] .player-rank {
+            background-color: var(--rank-high);
+        }
+
+        .sub-tier-column[data-sub="MID"] .player-rank {
+            background-color: var(--rank-mid);
+        }
+
+        .sub-tier-column[data-sub="LOW"] .player-rank {
+            background-color: var(--rank-low);
+        }
+        
+        /* Применяем цвета к рамкам при наведении */
+        .tier-card.tier-1:hover {
+            border-color: var(--tier1-bg);
+        }
+
+        .tier-card.tier-2:hover {
+            border-color: var(--tier2-bg);
+        }
+
+        .tier-card.tier-3:hover {
+            border-color: var(--tier3-bg);
+        }
+        
+        /* Акцентные элементы */
+        .search-icon {
+            color: var(--accent);
+        }
+
+        #searchInput:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+        }
+
+        .search-hint span {
+            color: var(--accent);
+        }
+
+        .reset-btn {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .reset-btn:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .stats span {
+            color: var(--accent);
+        }
+
+        .player-item.highlight {
+            border-color: var(--accent);
+            background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 20%, #1e2a3a) 0%, #1e2a3a 100%);
+            box-shadow: 0 0 20px color-mix(in srgb, var(--accent) 50%, transparent);
+        }
+
+        /* ==================== СТИЛИ СКРОЛЛБАРА ==================== */
+        .players-list::-webkit-scrollbar,
+        .sub-tier-list::-webkit-scrollbar {
+            width: var(--scrollbar-width);
+        }
+
+        .players-list::-webkit-scrollbar-track,
+        .sub-tier-list::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+            border-radius: 10px;
+        }
+
+        .players-list::-webkit-scrollbar-thumb,
+        .sub-tier-list::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb);
+            border-radius: 10px;
+            transition: background 0.2s;
+        }
+
+        .players-list::-webkit-scrollbar-thumb:hover,
+        .sub-tier-list::-webkit-scrollbar-thumb:hover {
+            background: color-mix(in srgb, var(--scrollbar-thumb) 80%, white);
+        }
+
+        /* Firefox */
+        .players-list,
+        .sub-tier-list {
+            scrollbar-width: thin;
+            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+        }
+
+        /* ==================== ОСНОВНЫЕ СТИЛИ ==================== */
         * {
             margin: 0;
             padding: 0;
@@ -13,39 +191,33 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #0A0A0A;
-            color: #EDEDED;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
             min-height: 100vh;
-            padding: 30px 20px;
-        }
-		.search-container {
-			position: sticky;
-			top: 0;
-			z-index: 1000;
-			background-color: #0A0A0A;
-			padding: 20px 0;
-			margin-bottom: 20px;
-			border-bottom: 1px solid #2A2A2A;
-			backdrop-filter: blur(10px);
-			background-color: rgba(10, 10, 10, 0.95);
-		}
-
-		/* Чтобы контент не прятался под поиском */
-		.tiers-grid {
-			scroll-margin-top: 100px;
-		}
-        .container {
-            max-width: 1600px;
-            margin: 0 auto;
         }
 
-        /* ----- Поиск ----- */
         .search-container {
-            margin-bottom: 40px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 10px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 20px 30px 20px;
+        }
+
+        html {
+            scroll-padding-top: 100px;
         }
 
         .search-wrapper {
@@ -59,7 +231,6 @@
             left: 16px;
             top: 50%;
             transform: translateY(-50%);
-            color: #3B82F6;
             font-size: 20px;
             pointer-events: none;
         }
@@ -68,9 +239,9 @@
             width: 100%;
             padding: 16px 20px 16px 50px;
             background-color: #1A1A1A;
-            border: 1px solid #2A2A2A;
+            border: 1px solid var(--border-color);
             border-radius: 40px;
-            color: #EDEDED;
+            color: var(--text-primary);
             font-size: 16px;
             outline: none;
             transition: all 0.2s;
@@ -78,9 +249,7 @@
         }
 
         #searchInput:focus {
-            border-color: #3B82F6;
             background-color: #222;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
         }
 
         #searchInput::placeholder {
@@ -88,82 +257,58 @@
         }
 
         .search-hint {
-            color: #8A8F99;
+            color: var(--text-secondary);
             font-size: 14px;
         }
         .search-hint span {
-            color: #3B82F6;
             font-weight: 500;
         }
 
-        /* Сетка основных тиров */
         .tiers-grid {
             display: grid;
             grid-template-columns: 1fr 1.8fr 1fr;
             gap: 25px;
             align-items: start;
+            margin-top: 20px;
         }
 
-        /* Карточка тира */
         .tier-card {
-            background-color: #141414;
+            background-color: var(--bg-card);
             border-radius: 24px;
             overflow: hidden;
-            border: 1px solid #2A2A2A;
+            border: 1px solid var(--border-color);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, transform 0.2s;
             display: flex;
             flex-direction: column;
         }
 
         .tier-card:hover {
-            border-color: #3B82F6;
+            transform: translateY(-4px);
         }
 
         .tier-header {
             padding: 20px;
             text-align: center;
-            border-bottom: 1px solid #2A2A2A;
-            background: #1E1E1E;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .tier-name {
-            font-size: 24px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 1px;
             color: #FFFFFF;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
 
-        /* Общий контейнер списка (для Tier 1 и Tier 3) */
         .players-list {
             padding: 16px;
             flex: 1;
             max-height: 600px;
             overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: #3B82F6 #2A2A2A;
             scroll-behavior: smooth;
         }
 
-        .players-list::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .players-list::-webkit-scrollbar-track {
-            background: #2A2A2A;
-            border-radius: 10px;
-        }
-
-        .players-list::-webkit-scrollbar-thumb {
-            background: #3B82F6;
-            border-radius: 10px;
-        }
-
-        .players-list::-webkit-scrollbar-thumb:hover {
-            background: #2563eb;
-        }
-
-        /* Специально для Tier 2 — три колонки */
         .tier2-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -172,102 +317,107 @@
         }
 
         .sub-tier-column {
-            background-color: #1E1E1E;
+            background-color: var(--bg-subtier);
             border-radius: 16px;
-            border: 1px solid #2A2A2A;
+            border: 1px solid var(--border-color);
             overflow: hidden;
+            transition: transform 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sub-tier-column:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
         }
 
         .sub-tier-header {
-            padding: 12px;
+            padding: 14px;
             text-align: center;
-            background-color: #252525;
-            border-bottom: 1px solid #2A2A2A;
-            font-weight: 600;
-            color: #3B82F6;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            color: white;
         }
 
-        /* Стили для списков внутри подтиров */
         .sub-tier-list {
             padding: 8px;
             max-height: 500px;
             overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: #3B82F6 #2A2A2A;
+            flex: 1;
         }
 
-        .sub-tier-list::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .sub-tier-list::-webkit-scrollbar-track {
-            background: #2A2A2A;
-            border-radius: 10px;
-        }
-
-        .sub-tier-list::-webkit-scrollbar-thumb {
-            background: #3B82F6;
-            border-radius: 10px;
-        }
-
-        .sub-tier-list::-webkit-scrollbar-thumb:hover {
-            background: #2563eb;
-        }
-
-        /* Карточка игрока */
         .player-item {
             display: flex;
             align-items: center;
-            padding: 8px 10px;
-            background-color: #222;
-            border-radius: 10px;
-            margin-bottom: 6px;
+            padding: 10px 12px;
+            background-color: var(--bg-player);
+            border-radius: 12px;
+            margin-bottom: 8px;
             border: 2px solid transparent;
-            transition: background 0.2s, border-color 0.2s;
-            scroll-margin: 20px;
+            transition: all 0.2s ease;
+            scroll-margin: 100px;
+            cursor: pointer;
         }
 
         .player-item:hover {
-            background-color: #2A2A2A;
-            border-color: #3B82F6;
-        }
-
-        .player-item.highlight {
-            border-color: #3B82F6;
-            background-color: #2A3A50;
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+            background-color: var(--bg-player-hover);
+            transform: translateX(4px);
         }
 
         .player-rank {
-            width: 26px;
-            height: 26px;
-            background-color: #3B82F6;
+            width: 28px;
+            height: 28px;
             color: white;
-            font-weight: 700;
-            border-radius: 6px;
+            font-weight: 800;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 10px;
-            font-size: 12px;
+            margin-right: 12px;
+            font-size: 13px;
             flex-shrink: 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .player-name {
             font-weight: 500;
             word-break: break-word;
-            color: #F0F0F0;
+            color: var(--text-primary);
             font-size: 14px;
+            letter-spacing: 0.3px;
         }
 
         .empty-message {
             text-align: center;
             color: #6B6B6B;
-            padding: 20px 0;
+            padding: 30px 0;
             font-style: italic;
+            font-size: 14px;
         }
 
-        /* Адаптивность */
+        .reset-btn {
+            background: #2A2A2A;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-left: 12px;
+            border: 1px solid;
+        }
+
+        .stats {
+            text-align: center;
+            margin: 20px 0;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .stats span {
+            font-weight: 600;
+        }
+
         @media (max-width: 1200px) {
             .tiers-grid {
                 grid-template-columns: 1fr;
@@ -281,42 +431,43 @@
             .tier2-grid {
                 grid-template-columns: 1fr;
             }
+            .tier-name {
+                font-size: 22px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Поиск -->
-        <div class="search-container">
-            <div class="search-wrapper">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="searchInput" placeholder="Введите ник игрока...">
-            </div>
-            <div class="search-hint">
-                <span>⏎</span> Начните печатать — страница найдет и подсветит игрока
-            </div>
+    <div class="search-container">
+        <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="Введите ник игрока...">
         </div>
+        <div class="search-hint">
+            <span>⏎</span> Начните печатать — страница найдет и подсветит игрока
+            <button class="reset-btn" id="resetHighlightBtn">✕ Сбросить</button>
+        </div>
+    </div>
 
-        <!-- Три основных тира -->
+    <div class="container">
+        <div class="stats" id="stats"></div>
+
         <div class="tiers-grid">
-            <!-- Tier 1 -->
-            <div class="tier-card">
+            <div class="tier-card tier-1">
                 <div class="tier-header">
                     <div class="tier-name">TIER 1</div>
                 </div>
                 <div class="players-list" id="tier1List"></div>
             </div>
 
-            <!-- Tier 2 (три колонки) -->
-            <div class="tier-card">
+            <div class="tier-card tier-2">
                 <div class="tier-header">
                     <div class="tier-name">TIER 2</div>
                 </div>
                 <div class="tier2-grid" id="tier2Container"></div>
             </div>
 
-            <!-- Tier 3 -->
-            <div class="tier-card">
+            <div class="tier-card tier-3">
                 <div class="tier-header">
                     <div class="tier-name">TIER 3</div>
                 </div>
@@ -326,117 +477,114 @@
     </div>
 
     <script>
-        // Текущее распределение
+        // ========== ЗАГРУЗКА ИЗ JSON ==========
         let tiers = {
             tier1: [],
-            tier2: { tier1: [], tier2: [], tier3: [] },
+            tier2: { high: [], mid: [], low: [] },
             tier3: []
         };
 
-        // Функция распределения игроков по тирам
         function distributePlayers(players) {
-            // Очищаем текущие тиры
             tiers = {
                 tier1: [],
-                tier2: { tier1: [], tier2: [], tier3: [] },
+                tier2: { high: [], mid: [], low: [] },
                 tier3: []
             };
             
-            // Распределяем игроков согласно их значениям
             players.forEach(p => {
-                const tier = p.tier;
+                let tier = p.tier;
                 const name = p.name;
-                
                 if (!name || !tier) return;
+                tier = String(tier).toLowerCase().trim();
                 
-                // Tier 1
+                // Очищаем от "tier " если есть
+                if (tier.includes('tier')) {
+                    tier = tier.replace(/tier\s*/i, '');
+                }
+                
                 if (tier === '1') {
                     tiers.tier1.push(name);
-                }
-                // Tier 3
-                else if (tier === '3') {
+                } else if (tier === '3') {
                     tiers.tier3.push(name);
-                }
-                // Tier 2 с подтирами
-                else if (tier.startsWith('2.')) {
-                    const sub = tier.split('.')[1];
-                    if (sub === '1') tiers.tier2.tier1.push(name);
-                    else if (sub === '2') tiers.tier2.tier2.push(name);
-                    else if (sub === '3') tiers.tier2.tier3.push(name);
+                } else if (tier === '2.1') {
+                    tiers.tier2.high.push(name);
+                } else if (tier === '2.2') {
+                    tiers.tier2.mid.push(name);
+                } else if (tier === '2.3') {
+                    tiers.tier2.low.push(name);
                 }
             });
             
-            // Обновляем отображение
+            updateStats();
             renderAll();
         }
 
-        // Загрузка данных из локального JSON-файла
         async function loadPlayers() {
-            console.log('1. Начинаем загрузку');
             try {
                 const url = 'data/players.json?t=' + Math.random();
                 const response = await fetch(url);
                 const players = await response.json();
-                console.log('2. Получили игроков:', players);
-                
-                console.log('3. Вызываем distributePlayers');
+                console.log(`Загружено ${players.length} игроков из JSON`);
                 distributePlayers(players);
-                console.log('4. После distributePlayers, tiers:', tiers);
-                
             } catch (error) {
-                console.error('Ошибка:', error);
+                console.error('Ошибка загрузки JSON:', error);
+                document.getElementById('tier1List').innerHTML = '<div class="empty-message">❌ Данные не загружены</div>';
+                document.getElementById('tier2Container').innerHTML = '<div class="empty-message">❌ Данные не загружены</div>';
+                document.getElementById('tier3List').innerHTML = '<div class="empty-message">❌ Данные не загружены</div>';
             }
         }
 
-        // Рендер обычного списка (Tier 1 и Tier 3)
+        function updateStats() {
+            const total = tiers.tier1.length + tiers.tier2.high.length + tiers.tier2.mid.length + tiers.tier2.low.length + tiers.tier3.length;
+            const statsDiv = document.getElementById('stats');
+            if (statsDiv) {
+                statsDiv.innerHTML = `
+                    Всего игроков: <span>${total}</span> &nbsp;|&nbsp;
+                    TIER 1: <span>${tiers.tier1.length}</span> &nbsp;|&nbsp;
+                    HIGH: <span>${tiers.tier2.high.length}</span> &nbsp;|&nbsp;
+                    MID: <span>${tiers.tier2.mid.length}</span> &nbsp;|&nbsp;
+                    LOW: <span>${tiers.tier2.low.length}</span> &nbsp;|&nbsp;
+                    TIER 3: <span>${tiers.tier3.length}</span>
+                `;
+            }
+        }
+
         function renderSimpleList(elementId, playersArray) {
             const container = document.getElementById(elementId);
             container.innerHTML = '';
-
             if (!playersArray || playersArray.length === 0) {
                 container.innerHTML = '<div class="empty-message">— пусто —</div>';
                 return;
             }
-
             const sorted = [...playersArray].sort((a, b) => a.localeCompare(b));
-
             sorted.forEach((player, index) => {
                 const item = document.createElement('div');
                 item.className = 'player-item';
                 item.setAttribute('data-player', player);
-                item.innerHTML = `
-                    <div class="player-rank">${index + 1}</div>
-                    <span class="player-name">${player}</span>
-                `;
+                item.innerHTML = `<div class="player-rank">${index + 1}</div><span class="player-name">${escapeHtml(player)}</span>`;
                 container.appendChild(item);
             });
         }
 
-        // Рендер Tier 2 (три колонки)
         function renderTier2(containerId, subTiers) {
             const container = document.getElementById(containerId);
             container.innerHTML = '';
-
-            const tierKeys = [
-                { key: 'tier1', label: 'HIGH' },
-                { key: 'tier2', label: 'MID' },
-                { key: 'tier3', label: 'LOW' }
+            const mapping = [
+                { key: 'high', label: 'HIGH', dataSub: 'HIGH' },
+                { key: 'mid',  label: 'MID', dataSub: 'MID' },
+                { key: 'low',  label: 'LOW', dataSub: 'LOW' }
             ];
-
-            tierKeys.forEach(t => {
+            mapping.forEach(t => {
                 const playersInSub = subTiers[t.key] || [];
                 const sorted = [...playersInSub].sort((a, b) => a.localeCompare(b));
-
                 const column = document.createElement('div');
                 column.className = 'sub-tier-column';
-
+                column.setAttribute('data-sub', t.dataSub);
                 const header = document.createElement('div');
                 header.className = 'sub-tier-header';
                 header.textContent = t.label;
-
                 const listDiv = document.createElement('div');
                 listDiv.className = 'sub-tier-list';
-
                 if (sorted.length === 0) {
                     listDiv.innerHTML = '<div class="empty-message">— пусто —</div>';
                 } else {
@@ -444,34 +592,33 @@
                         const playerItem = document.createElement('div');
                         playerItem.className = 'player-item';
                         playerItem.setAttribute('data-player', player);
-                        playerItem.innerHTML = `
-                            <div class="player-rank">${idx + 1}</div>
-                            <span class="player-name">${player}</span>
-                        `;
+                        playerItem.innerHTML = `<div class="player-rank">${idx + 1}</div><span class="player-name">${escapeHtml(player)}</span>`;
                         listDiv.appendChild(playerItem);
                     });
                 }
-
                 column.appendChild(header);
                 column.appendChild(listDiv);
                 container.appendChild(column);
             });
         }
 
-        // Поиск и подсветка
-        let highlightTimeout = null;
-
-        function findAndHighlightPlayer(searchTerm) {
-            document.querySelectorAll('.player-item.highlight').forEach(el => {
-                el.classList.remove('highlight');
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
             });
+        }
 
-            if (!searchTerm || searchTerm.length < 1) return;
-
-            const lowerSearch = searchTerm.toLowerCase();
+        let highlightTimeout = null;
+        function findAndHighlightPlayer(searchTerm) {
+            document.querySelectorAll('.player-item.highlight').forEach(el => el.classList.remove('highlight'));
+            if (!searchTerm || searchTerm.trim().length === 0) return;
+            const lowerSearch = searchTerm.trim().toLowerCase();
             const allPlayers = document.querySelectorAll('.player-item');
             let targetElement = null;
-
             for (let el of allPlayers) {
                 const playerName = el.getAttribute('data-player') || '';
                 if (playerName.toLowerCase().includes(lowerSearch)) {
@@ -479,36 +626,40 @@
                     break;
                 }
             }
-
             if (targetElement) {
                 targetElement.classList.add('highlight');
-                targetElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center'
-                });
-
+                targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 if (highlightTimeout) clearTimeout(highlightTimeout);
-                highlightTimeout = setTimeout(() => {
-                    targetElement.classList.remove('highlight');
-                }, 3000);
+                highlightTimeout = setTimeout(() => targetElement.classList.remove('highlight'), 3000);
             }
         }
 
-        // Обновление всех тиров
+        function resetHighlight() {
+            document.querySelectorAll('.player-item.highlight').forEach(el => el.classList.remove('highlight'));
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.value = '';
+                searchInput.focus();
+            }
+        }
+
         function renderAll() {
             renderSimpleList('tier1List', tiers.tier1);
             renderTier2('tier2Container', tiers.tier2);
             renderSimpleList('tier3List', tiers.tier3);
         }
 
-        // Инициализация
         async function init() {
-            await loadPlayers(); // загружаем данные из локального файла
-
+            await loadPlayers();  // Загружаем из JSON
+            
             const searchInput = document.getElementById('searchInput');
-            searchInput.addEventListener('input', (e) => {
-                findAndHighlightPlayer(e.target.value);
-            });
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => findAndHighlightPlayer(e.target.value));
+            }
+            const resetBtn = document.getElementById('resetHighlightBtn');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', resetHighlight);
+            }
         }
 
         init();
