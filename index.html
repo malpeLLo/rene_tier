@@ -141,6 +141,25 @@
             color: white;
         }
 
+        /* Стили для кнопки регистрации */
+        .register-btn {
+			background: #2A2A2A;
+			padding: 8px 16px;
+			border-radius: 40px;
+			font-size: 13px;
+			cursor: pointer;
+			transition: all 0.2s;
+			border: 1px solid var(--accent);
+			color: var(--accent);
+			text-decoration: none;
+			display: inline-block;
+		}
+
+		.register-btn:hover {
+			background: var(--accent);
+			color: white;
+		}
+
         .stats span {
             color: var(--accent);
         }
@@ -224,6 +243,14 @@
             position: relative;
             width: 100%;
             max-width: 500px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            flex: 1;
         }
 
         .search-icon {
@@ -259,6 +286,10 @@
         .search-hint {
             color: var(--text-secondary);
             font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            justify-content: center;
         }
         .search-hint span {
             font-weight: 500;
@@ -434,14 +465,24 @@
             .tier-name {
                 font-size: 22px;
             }
+            .search-wrapper {
+                flex-direction: column;
+            }
+            .register-btn {
+                width: 100%;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
     <div class="search-container">
         <div class="search-wrapper">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="searchInput" placeholder="Введите ник игрока...">
+            <div class="search-input-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Введите ник игрока...">
+            </div>
+            <button class="register-btn" id="registerBtn" onclick="window.open('https://forms.gle/mx3M8EWCruPp42Vn9', '_blank')">📝 Регистрация</button>
         </div>
         <div class="search-hint">
             <span>⏎</span> Начните печатать — страница найдет и подсветит игрока
