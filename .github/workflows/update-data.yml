@@ -19,7 +19,7 @@ jobs:
 
       - name: Fetch data from Google Sheets
         run: |
-          curl -L -o data/players.json "https://script.google.com/macros/s/AKfycbyBZ58uW_NY69SotikpB_9VD6Lok7seaOwMQe4z8Ez-xYkxTZakbooZg-NrNvPaxR_I9w/exec"
+          curl -L -o data/players.json "https://script.google.com/macros/s/AKfycbw1OCo0jyKNZZb5P7jnyJoXslGPhgwvmaAMs1yOyO-OnQXyq6i2V0xBu_aDRqK3rJGM5A/exec"
 
       - name: Commit and push if changed
         run: |
